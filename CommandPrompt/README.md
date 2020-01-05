@@ -8,4 +8,4 @@ This component is bare bones, and has no ability to do any special commands.
 
 
 
-I am planning to create an SSH component using this component.  I found you will need to target Windows 64-bit mode.  You can find that information here: https://stackoverflow.com/questions/59583322/createprocess-of-c-windows-system32-openssh-ssh-exe-fails-with-error-2
+I am planning to create an SSH component using this component.  You will need to target Windows 64-bit mode.  You can find that information here: https://stackoverflow.com/questions/59583322/createprocess-of-c-windows-system32-openssh-ssh-exe-fails-with-error-2
