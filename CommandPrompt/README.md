@@ -39,3 +39,7 @@ end;
 ```
 
 I am planning to create an SSH component using this component.  You will need to target Windows 64-bit mode.  You can find that information here: https://stackoverflow.com/questions/59583322/createprocess-of-c-windows-system32-openssh-ssh-exe-fails-with-error-2
+
+
+This component was created using Delphi 10.3
+
