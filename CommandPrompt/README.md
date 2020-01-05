@@ -5,4 +5,4 @@
   https://stackoverflow.com/questions/10598313/communicate-with-command-prompt-through-delphi
 
 
-In order to use SSH using this component you will need to target Windows 64-bit mode.
+In order to use SSH using this component you will need to target Windows 64-bit mode.  I'm right now working on building a SSH component that uses this component.
