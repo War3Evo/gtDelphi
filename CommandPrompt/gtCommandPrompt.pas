@@ -14,12 +14,13 @@ uses
   System.SysUtils, System.Classes, Windows;
 
 type
-  TTmonitorUpdate = procedure(OutPut: AnsiString) of object;
+  TTmonitorUpdate = procedure(OutPut, Error: AnsiString) of object;
 
   TTmonitor = class(TThread)  // pipe monitoring thread for console output
   private
     iThreadSleep: Cardinal;
     TextString: AnsiString;
+    ErrorString: AnsiString;
     FTTmonitorUpdate: TTmonitorUpdate;
     procedure UpdateComponent;
   protected
@@ -28,15 +29,15 @@ type
     property OnUpdateComponent: TTmonitorUpdate read FTTmonitorUpdate write FTTmonitorUpdate;
   end;
 
-  TOnReadCommandPrompt = procedure(OutPut: AnsiString) of object;
-  TOnWriteCommandPrompt = procedure(OutPut: AnsiString) of object;
+  TOnReadCommandPrompt = procedure(OutPut: String) of object;
+  TOnWriteCommandPrompt = procedure(OutPut: String) of object;
 
-  TOnError = procedure(OutPut: AnsiString) of object;
+  TOnError = procedure(OutPut: String) of object;
 
   TCommandPrompt = class(TComponent)
   private
     { Private declarations }
-    ThreadDone: Boolean;
+    FThreadDone: Boolean;
     FThreadSleep: Cardinal;
 
     FComponentThread: TTmonitor;
@@ -46,7 +47,7 @@ type
     FOnReadCommandPrompt : TOnReadCommandPrompt;
     FOnWriteCommandPrompt : TOnWriteCommandPrompt;
 
-    procedure OnThreadUpdate(OutPut: AnsiString);
+    procedure OnThreadUpdate(OutPut, Error: AnsiString);
   protected
     { Protected declarations }
   public
@@ -54,8 +55,9 @@ type
     procedure Start();
     procedure Stop();
 
-    procedure cmdWriteln(text: AnsiString);
+    procedure cmdWriteln(text: String);
 
+    // constructors are always public / syntax is always the same
     constructor Create(AOwner: TComponent); override;
   published
     { Published declarations }
@@ -86,21 +88,21 @@ end;
 
 constructor TCommandPrompt.Create(AOwner: TComponent);
 begin
-  inherited;
+  inherited Create(AOwner);  //ALWAYS do this first!
 
-  ThreadDone := true;
-  FThreadSleep := 40;
+    FThreadDone := true;
+    FThreadSleep := 40;
 end;
 
 procedure WritePipeOut(OutputPipe: THandle; InString: AnsiString);
 // writes Instring to the pipe handle described by OutputPipe
-  var
-    byteswritten: Cardinal;
-  begin
-// most console programs require CR/LF after their input.
+var
+  byteswritten: Cardinal;
+begin
+    // most console programs require CR/LF after their input.
     InString := InString + #13#10;
     WriteFile(OutputPipe, Instring[1], Length(Instring), byteswritten, nil);
-  end;
+end;
 
 function ReadPipeInput(InputPipe: THandle; var BytesRem: Cardinal): AnsiString;
 {
@@ -135,17 +137,21 @@ procedure TTmonitor.Execute;
    data in and updates the memo on the form with the output }
 var
   BytesRem: Cardinal;
+  SyncIT: Boolean;
 begin
   while not Terminated do
     begin
-      // read regular output stream and put on screen.
+      SyncIT := false;
+      TextString := '';
+      ErrorString := '';
+      // read regular output stream.
       TextString := ReadPipeInput(OutputPipeRead, BytesRem);
-      if TextString <> '' then
-         Synchronize(UpdateComponent);
-      // now read error stream and put that on screen.
-      TextString := ReadPipeInput(ErrorPipeRead, BytesRem);
-      if TextString <> '' then
-         Synchronize(UpdateComponent);
+      if TextString <> '' then SyncIT := true;
+      // now read error stream.
+      ErrorString := ReadPipeInput(ErrorPipeRead, BytesRem);
+      if ErrorString <> '' then SyncIT := true;
+
+      if SyncIT = true then Synchronize(UpdateComponent);
       sleep(iThreadSleep);
     end;
 end;
@@ -154,59 +160,52 @@ procedure TTmonitor.UpdateComponent;
 // synchronize procedure for monitor thread
 begin
   if assigned(FTTmonitorUpdate) = true then
-  begin
-    try
-      FTTmonitorUpdate(TextString);
-    finally
-    end;
-  end;
+     FTTmonitorUpdate(TextString, ErrorString);
+  // clear buffer
+  TextString := '';
+  ErrorString := '';
 end;
 
-procedure TCommandPrompt.OnThreadUpdate(OutPut: AnsiString);
+procedure TCommandPrompt.OnThreadUpdate(OutPut, Error: AnsiString);
 // synchronize procedure for monitor thread
 begin
   if assigned(FOnReadCommandPrompt) = true then
-  try
-    FOnReadCommandPrompt(OutPut);
-  finally
-  end;
+      if OutPut <> '' then FOnReadCommandPrompt(String(OutPut));
+  if assigned(FOnError) = true then
+      if Error <> '' then FOnError(String(Error));
 end;
 
 Destructor TCommandPrompt.Destroy;
 begin
-  WritePipeOut(InputPipeWrite, 'EXIT'); // quit the CMD we started
-  if FComponentThread.Terminated = false then FComponentThread.Terminate;
-  // close process handles
-  CloseHandle(ProcessInfo.hProcess);
-  CloseHandle(ProcessInfo.hThread);
-  // close pipe handles
-  CloseHandle(InputPipeRead);
-  CloseHandle(InputPipeWrite);
-  CloseHandle(OutputPipeRead);
-  CloseHandle(OutputPipeWrite);
-  CloseHandle(ErrorPipeRead);
-  CloseHandle(ErrorPipeWrite);
+    WritePipeOut(InputPipeWrite, 'EXIT'); // quit the CMD we started
+
+    // close process handles
+    CloseHandle(ProcessInfo.hProcess);
+    CloseHandle(ProcessInfo.hThread);
+    // close pipe handles
+    CloseHandle(InputPipeRead);
+    CloseHandle(InputPipeWrite);
+    CloseHandle(OutputPipeRead);
+    CloseHandle(OutputPipeWrite);
+    CloseHandle(ErrorPipeRead);
+    CloseHandle(ErrorPipeWrite);
 
   // Always call the parent destructor after running your own code
   inherited;
 end;
 
 
-procedure TCommandPrompt.cmdWriteln(text: AnsiString);
+procedure TCommandPrompt.cmdWriteln(text: String);
 begin
-  WritePipeOut(InputPipeWrite, text);
+  WritePipeOut(InputPipeWrite, AnsiString(text));
   if assigned(FOnWriteCommandPrompt) = true then
-  try
     FOnWriteCommandPrompt(text);
-  finally
-
-  end;
 end;
 
 procedure TCommandPrompt.Stop();
 begin
   if FComponentThread.Terminated = false then FComponentThread.Terminate;
-  ThreadDone := true;
+  FThreadDone := true;
 end;
 
 procedure TCommandPrompt.Start();
@@ -219,13 +218,10 @@ procedure TCommandPrompt.Start();
     Security : TSecurityAttributes;
     start : TStartUpInfo;
   begin
-    if ThreadDone = false then
+    if FThreadDone = false then
       begin
-        if assigned(FOnError) then
-        try
+        if assigned(FOnError) = true then
           FOnError('Start Error: Thread already running!');
-        finally
-        end;
         exit;
       end;
 
@@ -258,13 +254,18 @@ procedure TCommandPrompt.Start();
                CREATE_NEW_CONSOLE or SYNCHRONIZE,
                nil, nil, start, ProcessInfo) then
       begin
-        FComponentThread := TTmonitor.Create(true);  // don't start yet monitor thread
-        FComponentThread.Priority := tpHigher;
-        FComponentThread.iThreadSleep := 40;
-        FComponentThread.FreeOnTerminate := true;
-        FComponentThread.OnUpdateComponent := OnThreadUpdate;
-        ThreadDone := false;
-        FComponentThread.Start; // start thread;
+          FComponentThread := TTmonitor.Create(true);  // don't start yet monitor thread
+        try
+          FComponentThread.Priority := tpHigher;
+          FComponentThread.iThreadSleep := FThreadSleep; // default is 40
+          FComponentThread.FreeOnTerminate := true;
+          FComponentThread.OnUpdateComponent := OnThreadUpdate;
+          FThreadDone := false;
+          FComponentThread.Start; // start thread;
+        except
+          FComponentThread.Free;
+          Raise Exception.Create('Could not create monitor thread!');
+        end;
       end;
  end;
 
