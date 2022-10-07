@@ -1,0 +1,195 @@
+object viewMain: TviewMain
+  Left = 0
+  Top = 0
+  Caption = 'Form25'
+  ClientHeight = 663
+  ClientWidth = 621
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object grpConfig: TGroupBox
+    Align = MostTop
+    Size.Width = 621.000000000000000000
+    Size.Height = 193.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Settings'
+    TabOrder = 0
+    object edtEncoding: TComboBox
+      Items.Strings = (
+        'Auto'
+        'Numeric'
+        'Alphanumeric'
+        'ISO88591'
+        'UTF8NoBOM'
+        'UTF8BOM')
+      ItemIndex = 0
+      Position.X = 128.000000000000000000
+      Position.Y = 54.000000000000000000
+      Size.Width = 193.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+    end
+    object Label2: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 54.000000000000000000
+      Size.Width = 89.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Encoding'
+      TabOrder = 3
+    end
+    object Label3: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 86.000000000000000000
+      Text = 'Quiet Zone'
+      TabOrder = 4
+    end
+    object edtQZone: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 5
+      Cursor = crIBeam
+      Min = 1.000000000000000000
+      Max = 6.000000000000000000
+      Value = 4.000000000000000000
+      Position.X = 128.000000000000000000
+      Position.Y = 82.000000000000000000
+      Size.Width = 84.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object btnGen: TButton
+      Position.X = 17.000000000000000000
+      Position.Y = 157.000000000000000000
+      TabOrder = 0
+      Text = 'Generate'
+      OnClick = btnGenClick
+    end
+    object btnSave: TButton
+      Enabled = False
+      Position.X = 240.000000000000000000
+      Position.Y = 157.000000000000000000
+      TabOrder = 9
+      Text = 'Save to File'
+      OnClick = btnSaveClick
+    end
+    object HeightEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 38
+      Text = '2048'
+      Position.X = 220.000000000000000000
+      Position.Y = 127.000000000000000000
+    end
+    object Label4: TLabel
+      Position.X = 128.000000000000000000
+      Position.Y = 167.000000000000000000
+      Size.Width = 77.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Label4'
+      TabOrder = 12
+    end
+    object Label5: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 126.000000000000000000
+      Size.Width = 56.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Width'
+      TabOrder = 39
+    end
+    object Label6: TLabel
+      Position.X = 172.000000000000000000
+      Position.Y = 126.000000000000000000
+      Size.Width = 40.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Height'
+      TabOrder = 17
+    end
+    object WidthEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 40
+      Text = '2048'
+      Position.X = 48.000000000000000000
+      Position.Y = 127.000000000000000000
+    end
+    object edtData: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 1
+      Text = 'gtDelphi QRCode Generator'
+      Position.X = 8.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 329.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object mLog: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = MostBottom
+    Margins.Left = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 616.000000000000000000
+    Size.Width = 601.000000000000000000
+    Size.Height = 47.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Viewport.Width = 597.000000000000000000
+    Viewport.Height = 43.000000000000000000
+  end
+  object SD: TSaveDialog
+    DefaultExt = '*.bmp'
+    Filter = 'Bitmap (*.bmp)|*.bmp'
+    Left = 176
+    Top = 536
+  end
+  object ScrollBox1: TScrollBox
+    Align = Client
+    Size.Width = 621.000000000000000000
+    Size.Height = 423.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    Viewport.Width = 621.000000000000000000
+    Viewport.Height = 423.000000000000000000
+    object imgQRCode: TImage
+      MultiResBitmap = <
+        item
+        end>
+      DisableInterpolation = True
+      Position.X = 21.000000000000000000
+      Position.Y = 14.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 100.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object SkSvg1: TSkSvg
+      Align = Client
+      Size.Width = 621.000000000000000000
+      Size.Height = 423.000000000000000000
+      Size.PlatformDefault = False
+      object PaperSketchEffect1: TPaperSketchEffect
+        brushSize = 3.000000000000000000
+      end
+    end
+  end
+  object gtQRCodeGenFMX1: TgtQRCodeGenFMX
+    Encoding = qrAuto
+    ErrorCorrectionLevel = 0
+    QuietZone = 0
+    ImageControl = imgQRCode
+    ThreadSleep = 0
+    OnGenerateBefore = gtQRCodeGenFMX1GenerateBefore
+    OnGenerateDuring = gtQRCodeGenFMX1GenerateDuring
+    OnGenerateAfter = gtQRCodeGenFMX1GenerateAfter
+    OnError = gtQRCodeGenFMX1Error
+    OnImageControlFinish = gtQRCodeGenFMX1ImageControlFinish
+    Left = 192
+    Top = 328
+  end
+end
