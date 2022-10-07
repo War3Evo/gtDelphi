@@ -61,9 +61,9 @@ type
 var
   viewMain: TviewMain;
   myBitmap: TBitmap;
-  myImage: TImage;
+  //myImage: TImage;
   iCount: integer;
-  iHeight, iWidth: integer;
+  //iHeight, iWidth: integer;
 
 implementation
 
@@ -92,14 +92,12 @@ begin
 end;
 
 procedure TviewMain.btnSaveClick(Sender: TObject);
-var
-  //SVG: TSVG2Graphic;
 begin
   if not myBitmap.IsEmpty then
     begin
       if SD.Execute then
         begin
-          myBitmap.Resize(2048,2048);
+          //myBitmap.Resize(2048,2048);   //going to have to find a better way... this is just tooo blurry.
 
           myBitmap.SaveToFile(SD.FileName);
         end;
@@ -123,8 +121,8 @@ end;
 
 procedure TviewMain.gtQRCodeGenFMX1GenerateAfter(Sender: TObject;
   const aQRCode: TBitmap);
-var rSrc: TRectF;
-    rDest: TRectF;
+//var rSrc: TRectF;
+  //  rDest: TRectF;
 begin
   //imgQRCode.Bitmap.Assign(aQRCode);
   myBitmap.Assign(aQRCode);
