@@ -3,6 +3,12 @@ gtDelphiZXingQRCode
 
 ### Threaded version of DelphiZXingQRCode ###
 
+10/07/2022
+
+* It's not multi-threaded, just threaded so your application can do other things while it's running in the background. *
+
+You can control how much cpu cycles it is using by increase or decreasing the ThreadSleep integer of gtDelphiZXingQRCode component.  It is default of 40 ms.
+
 * The FMX version works *
 
 * Worked over 10 hours straight to get this threaded version of DelphiZXingQRCode working with all the bug fixes, updates, and errors reported on the original DelphiZXingQRCode page. *
