@@ -79,7 +79,7 @@ object viewMain: TviewMain
     object HeightEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       TabOrder = 38
-      Text = '2048'
+      Text = '512'
       Position.X = 220.000000000000000000
       Position.Y = 127.000000000000000000
     end
@@ -113,7 +113,7 @@ object viewMain: TviewMain
     object WidthEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       TabOrder = 40
-      Text = '2048'
+      Text = '512'
       Position.X = 48.000000000000000000
       Position.Y = 127.000000000000000000
     end
@@ -162,20 +162,9 @@ object viewMain: TviewMain
         item
         end>
       DisableInterpolation = True
-      Position.X = 21.000000000000000000
-      Position.Y = 14.000000000000000000
-      Size.Width = 100.000000000000000000
-      Size.Height = 100.000000000000000000
-      Size.PlatformDefault = False
-    end
-    object SkSvg1: TSkSvg
-      Align = Client
       Size.Width = 621.000000000000000000
       Size.Height = 423.000000000000000000
       Size.PlatformDefault = False
-      object PaperSketchEffect1: TPaperSketchEffect
-        brushSize = 3.000000000000000000
-      end
     end
   end
   object gtQRCodeGenFMX1: TgtQRCodeGenFMX

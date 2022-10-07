@@ -38,8 +38,6 @@ type
     Label6: TLabel;
     HeightEdit: TEdit;
     ScrollBox1: TScrollBox;
-    SkSvg1: TSkSvg;
-    PaperSketchEffect1: TPaperSketchEffect;
     procedure btnGenClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure gtQRCodeGenFMX1Error(Sender: TObject; Error: string);
@@ -63,7 +61,7 @@ var
   myBitmap: TBitmap;
   //myImage: TImage;
   iCount: integer;
-  //iHeight, iWidth: integer;
+  iHeight, iWidth: integer;
 
 implementation
 
@@ -97,7 +95,7 @@ begin
     begin
       if SD.Execute then
         begin
-          //myBitmap.Resize(2048,2048);   //going to have to find a better way... this is just tooo blurry.
+          //Currently saves a 32 by 32 pixel file
 
           myBitmap.SaveToFile(SD.FileName);
         end;
@@ -125,7 +123,8 @@ procedure TviewMain.gtQRCodeGenFMX1GenerateAfter(Sender: TObject;
   //  rDest: TRectF;
 begin
   //imgQRCode.Bitmap.Assign(aQRCode);
-  myBitmap.Assign(aQRCode);
+
+            myBitmap.Assign(aQRCode);
 
         // RESIZE BITMAP
         {
@@ -175,7 +174,13 @@ end;
 procedure TviewMain.gtQRCodeGenFMX1GenerateBefore(Sender: TObject;
   const aQRCode: TBitmap);
 begin
-  iCount := 0;
+            iCount := 0;
+
+            iWidth := StrToInt(Trim(WidthEdit.Text));
+            iHeight := StrToInt(Trim(HeightEdit.Text));
+
+            imgQRCode.Height := iHeight;
+            imgQRCode.Width := iWidth;
 end;
 
 procedure TviewMain.gtQRCodeGenFMX1GenerateDuring(Sender: TObject;
