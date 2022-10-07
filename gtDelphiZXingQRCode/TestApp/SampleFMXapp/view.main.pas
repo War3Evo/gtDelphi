@@ -92,7 +92,7 @@ begin
 end;
 
 procedure TviewMain.btnSaveClick(Sender: TObject);
-//var
+var
   //SVG: TSVG2Graphic;
 begin
   if not myBitmap.IsEmpty then
