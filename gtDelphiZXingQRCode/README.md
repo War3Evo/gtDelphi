@@ -5,13 +5,13 @@ gtDelphiZXingQRCode
 
 10/07/2022
 
-* It's not multi-threaded, just threaded so your application can do other things while it's running in the background. *
+**It's not multi-threaded, just threaded so your application can do other things while it's running in the background.**
 
 You can control how much cpu cycles it is using by increase or decreasing the ThreadSleep integer of gtDelphiZXingQRCode component.  It is default of 40 ms.
 
-* The FMX version works *
+**The FMX version works**
 
-* Worked over 10 hours straight to get this threaded version of DelphiZXingQRCode working with all the bug fixes, updates, and errors reported on the original DelphiZXingQRCode page. *
+**Worked over 10 hours straight to get this threaded version of DelphiZXingQRCode working with all the bug fixes, updates, and errors reported on the original DelphiZXingQRCode page.**
 
 I'll upload a full sample application later, for now I'll just upload a sample.pas.
 
@@ -26,11 +26,11 @@ I'll update this later when I have a better sample project.
 
 --------------------------------------------------
 
-* The original code: https://github.com/foxitsoftware/DelphiZXingQRCode *
+**The original code: https://github.com/foxitsoftware/DelphiZXingQRCode**
 
 The original code hasn't been updated in 9 years and won't accept pull requests!
 
-* From the original code's README.MD: *
+**From the original code's README.MD:**
 
 DelphiZXingQRCode is a Delphi port of the QR Code functionality from ZXing, an open source 
 barcode image processing library. The code was ported to Delphi by Senior Debenu Developer, 
