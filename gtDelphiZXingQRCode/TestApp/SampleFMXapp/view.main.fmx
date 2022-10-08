@@ -2,8 +2,8 @@ object viewMain: TviewMain
   Left = 0
   Top = 0
   Caption = 'gtQRCodeGenFMX'
-  ClientHeight = 663
-  ClientWidth = 621
+  ClientHeight = 764
+  ClientWidth = 788
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -12,8 +12,8 @@ object viewMain: TviewMain
   DesignerMasterStyle = 0
   object grpConfig: TGroupBox
     Align = MostTop
-    Size.Width = 621.000000000000000000
-    Size.Height = 313.000000000000000000
+    Size.Width = 788.000000000000000000
+    Size.Height = 401.000000000000000000
     Size.PlatformDefault = False
     Text = 'Settings'
     TabOrder = 0
@@ -26,16 +26,16 @@ object viewMain: TviewMain
         'UTF8NoBOM'
         'UTF8BOM')
       ItemIndex = 0
-      Position.X = 80.000000000000000000
-      Position.Y = 169.000000000000000000
+      Position.X = 88.000000000000000000
+      Position.Y = 257.000000000000000000
       Size.Width = 193.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
     end
     object Label2: TLabel
-      Position.X = 8.000000000000000000
-      Position.Y = 169.000000000000000000
+      Position.X = 16.000000000000000000
+      Position.Y = 257.000000000000000000
       Size.Width = 89.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -43,8 +43,8 @@ object viewMain: TviewMain
       TabOrder = 2
     end
     object Label3: TLabel
-      Position.X = 8.000000000000000000
-      Position.Y = 199.000000000000000000
+      Position.X = 16.000000000000000000
+      Position.Y = 287.000000000000000000
       Text = 'Quiet Zone'
       TabOrder = 3
     end
@@ -55,23 +55,23 @@ object viewMain: TviewMain
       Min = 1.000000000000000000
       Max = 6.000000000000000000
       Value = 4.000000000000000000
-      Position.X = 80.000000000000000000
-      Position.Y = 199.000000000000000000
+      Position.X = 88.000000000000000000
+      Position.Y = 287.000000000000000000
       Size.Width = 84.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
     end
     object btnGen: TButton
-      Position.X = 17.000000000000000000
-      Position.Y = 283.000000000000000000
+      Position.X = 25.000000000000000000
+      Position.Y = 371.000000000000000000
       TabOrder = 0
       Text = 'Generate'
       OnClick = btnGenClick
     end
     object btnSave: TButton
       Enabled = False
-      Position.X = 240.000000000000000000
-      Position.Y = 283.000000000000000000
+      Position.X = 248.000000000000000000
+      Position.Y = 371.000000000000000000
       TabOrder = 8
       Text = 'Save to File'
       OnClick = btnSaveClick
@@ -80,12 +80,12 @@ object viewMain: TviewMain
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       TabOrder = 36
       Text = '512'
-      Position.X = 220.000000000000000000
-      Position.Y = 226.000000000000000000
+      Position.X = 228.000000000000000000
+      Position.Y = 314.000000000000000000
     end
     object Label4: TLabel
-      Position.X = 135.000000000000000000
-      Position.Y = 274.000000000000000000
+      Position.X = 143.000000000000000000
+      Position.Y = 362.000000000000000000
       Size.Width = 77.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -93,8 +93,8 @@ object viewMain: TviewMain
       TabOrder = 11
     end
     object Label5: TLabel
-      Position.X = 8.000000000000000000
-      Position.Y = 224.000000000000000000
+      Position.X = 16.000000000000000000
+      Position.Y = 312.000000000000000000
       Size.Width = 56.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -102,8 +102,8 @@ object viewMain: TviewMain
       TabOrder = 38
     end
     object Label6: TLabel
-      Position.X = 172.000000000000000000
-      Position.Y = 224.000000000000000000
+      Position.X = 180.000000000000000000
+      Position.Y = 312.000000000000000000
       Size.Width = 40.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -114,8 +114,8 @@ object viewMain: TviewMain
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       TabOrder = 39
       Text = '512'
-      Position.X = 48.000000000000000000
-      Position.Y = 229.000000000000000000
+      Position.X = 56.000000000000000000
+      Position.Y = 317.000000000000000000
     end
     object MemoHints: TMemo
       Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
@@ -163,7 +163,7 @@ object viewMain: TviewMain
         ''
         'MECARD:N:Doe,John;TEL:13035551212;EMAIL:john.doe@example.com;;'
         '')
-      Position.X = 360.000000000000000000
+      Position.X = 527.000000000000000000
       Position.Y = 48.000000000000000000
       Size.Width = 253.000000000000000000
       Size.Height = 243.000000000000000000
@@ -191,12 +191,12 @@ object viewMain: TviewMain
         'END:VCARD')
       Position.X = 8.000000000000000000
       Position.Y = 48.000000000000000000
-      Size.Width = 329.000000000000000000
-      Size.Height = 113.000000000000000000
+      Size.Width = 511.000000000000000000
+      Size.Height = 201.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 41
-      Viewport.Width = 309.000000000000000000
-      Viewport.Height = 109.000000000000000000
+      Viewport.Width = 491.000000000000000000
+      Viewport.Height = 197.000000000000000000
     end
     object Label1: TLabel
       Position.X = 8.000000000000000000
@@ -208,7 +208,7 @@ object viewMain: TviewMain
       TabOrder = 42
     end
     object Label7: TLabel
-      Position.X = 360.000000000000000000
+      Position.X = 527.000000000000000000
       Position.Y = 23.000000000000000000
       Size.Width = 253.000000000000000000
       Size.Height = 17.000000000000000000
@@ -218,8 +218,8 @@ object viewMain: TviewMain
     end
     object SVGcheckbox: TCheckBox
       StyledSettings = [Family, Size, FontColor]
-      Position.X = 17.000000000000000000
-      Position.Y = 256.000000000000000000
+      Position.X = 25.000000000000000000
+      Position.Y = 344.000000000000000000
       Size.Width = 147.000000000000000000
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
@@ -236,12 +236,12 @@ object viewMain: TviewMain
     Margins.Left = 10.000000000000000000
     Margins.Right = 10.000000000000000000
     Position.X = 10.000000000000000000
-    Position.Y = 512.000000000000000000
-    Size.Width = 601.000000000000000000
+    Position.Y = 613.000000000000000000
+    Size.Width = 768.000000000000000000
     Size.Height = 151.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
-    Viewport.Width = 597.000000000000000000
+    Viewport.Width = 764.000000000000000000
     Viewport.Height = 147.000000000000000000
   end
   object SD: TSaveDialog
@@ -252,12 +252,12 @@ object viewMain: TviewMain
   end
   object ScrollBox1: TScrollBox
     Align = Client
-    Size.Width = 621.000000000000000000
-    Size.Height = 199.000000000000000000
+    Size.Width = 788.000000000000000000
+    Size.Height = 212.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 8
-    Viewport.Width = 605.000000000000000000
-    Viewport.Height = 183.000000000000000000
+    Viewport.Width = 772.000000000000000000
+    Viewport.Height = 212.000000000000000000
     object imgQRCode: TImage
       MultiResBitmap = <
         item

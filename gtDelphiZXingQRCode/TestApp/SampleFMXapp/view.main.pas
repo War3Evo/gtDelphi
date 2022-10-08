@@ -17,7 +17,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ScrollBox,
   FMX.Memo, FMX.Objects, FMX.EditBox, FMX.SpinBox, FMX.ListBox,
   FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.Memo.Types,
-  gtQRCodeGenFMX, FMX.Layouts, Skia, Skia.FMX, FMX.Effects, FMX.Filter.Effects;
+  gtQRCodeGenFMX, FMX.Layouts, FMX.Effects, FMX.Filter.Effects;
 
 
 type
