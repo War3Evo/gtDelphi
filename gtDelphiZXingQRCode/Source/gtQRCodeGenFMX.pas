@@ -16,12 +16,12 @@ type
 
   //TOnGenerate = procedure(Sender: TObject; Tempo: Integer; const aQRCode: TBitmap) of object;
 
-  TOnGenerate = procedure(Sender: TObject; const aQRCode: TBitmap) of object;
+  TOnGenerate = procedure(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string) of object;
   TOnError = procedure(Sender: TObject; Error: String) of object;
   TOnFinish = procedure(Sender: TObject) of object;
 
   // Add threading
-  TTmonitorUpdate = procedure(Phase: integer; Error: String; const aQRCode: TBitmap) of object;
+  TTmonitorUpdate = procedure(const Phase: integer; const Error: String; const aQRCode: TBitmap; const sSVGfile: string) of object;
 
   TThreadingQRCodeGen = class(TThread)  // pipe monitoring thread for console output
   private
@@ -31,6 +31,9 @@ type
     ErrorString: String;
     TTFQRBitmap: TBitmap;
     FTTmonitorUpdate: TTmonitorUpdate;
+
+    bSaveSVG: boolean;
+    sSVGfile: String;
 
     FQR: TDelphiZXingQRCode;     //where the magic happens
 
@@ -48,6 +51,8 @@ type
 
     FComponentThread: TThreadingQRCodeGen;
 
+    FSaveSVG: boolean;
+
     FData: String;           //QR code information
     FEncoding: TQRCodeEncoding;  //Kind of text
     FqrErrorCorrectionLevel: integer;
@@ -62,7 +67,7 @@ type
     procedure DoGenQRCode(const aQRCode: TBitmap);
     procedure setImageControl(const Value: TImage);
 
-    procedure OnThreadUpdate(Phase: integer; Error: String; const aQRCode: TBitmap);
+    procedure OnThreadUpdate(const Phase: integer; const Error: String; const aQRCode: TBitmap; const sSVGfile: string);
   protected
     procedure DoOnError(ErrorMsg: String);
     procedure fDoSetErrorCorrectionLevel(value: integer);
@@ -72,6 +77,7 @@ type
     procedure GenerateQRCode;
     procedure Stop;
   published
+    property SaveSVG: boolean read FSaveSVG write FSaveSVG;
     property Data: String read FData write FData;
     property Encoding: TQRCodeEncoding read FEncoding write FEncoding;
     property ErrorCorrectionLevel: integer read FqrErrorCorrectionLevel write fDoSetErrorCorrectionLevel;
@@ -104,51 +110,67 @@ var
   bitdata: TBitmapData;
   Col, Row: Integer;
   PixelC: TAlphaColor;
+  FillString: string;
 begin
+      sSVGfile := '';
       try
         TTFQRBitmap := TBitmap.Create;
         iPhase := 1; // before
         Synchronize(UpdateComponent);
         sleep(iThreadSleep);
-        //if TTFQRBitmap.Canvas.BeginScene then
         try
-          //TTFQRBitmap.Canvas.Clear(TalphaColors.White); //cleaning the bitmap
           TTFQRBitmap.SetSize(FQR.Rows, FQR.Columns);
+          if bSaveSVG = true then
+            sSVGfile := sSVGfile + '<svg viewBox="0 0 ' + FQR.Rows.ToString + ' ' + FQR.Columns.ToString + '" xmlns="http://www.w3.org/2000/svg">';
           iPhase := 2;  // during
           for Row := 0 to Pred(FQR.Rows) do
             begin
               for Col := 0 to Pred(FQR.Columns) do
                 begin
-                  if FQR.IsBlack[Row,Col] then
-                    PixelC := talphacolors.Black
+                  if bSaveSVG = true then
+                  begin
+                    if FQR.IsBlack[Row,Col] then
+                      FillString := 'black'
+                    else
+                      FillString := 'white';
+                    // Create SVG Rect
+                    sSVGfile := sSVGfile + '<rect ';
+                    sSVGfile := sSVGfile + 'width="1" ';
+                    sSVGfile := sSVGfile + 'height="1" ';
+                    sSVGfile := sSVGfile + 'x="' + Row.ToString + '" ';
+                    sSVGfile := sSVGfile + 'y="' + Col.ToString + '" ';
+                    sSVGfile := sSVGfile + 'style="fill: ' + FillString + '; ';
+                    sSVGfile := sSVGfile + 'stroke: ' + FillString + '; ';
+                    sSVGfile := sSVGfile + 'stroke-width: 1;" />';
+                  end
                   else
-                    PixelC := talphacolors.White;
-                  if TTFQRBitmap.Map(TMapAccess.Write, bitdata) then
-                    begin
-                      Try
-                        bitdata.SetPixel(Col,Row, PixelC);
-                      Finally
-                        TTFQRBitmap.Unmap(bitdata);
-                      End;
-                    end;
-                    Synchronize(UpdateComponent);
-                    sleep(iThreadSleep);
+                  begin
+                    if FQR.IsBlack[Row,Col] then
+                      PixelC := talphacolors.Black
+                    else
+                      PixelC := talphacolors.White;
+                    if TTFQRBitmap.Map(TMapAccess.Write, bitdata) then
+                      begin
+                        Try
+                          bitdata.SetPixel(Col,Row, PixelC);
+                        Finally
+                          TTFQRBitmap.Unmap(bitdata);
+                        End;
+                      end;
+                  end;
+                  Synchronize(UpdateComponent);
+                  sleep(iThreadSleep);
                 end;
                 Synchronize(UpdateComponent);
                 sleep(iThreadSleep);
             end;
-            iPhase := 3;  // after
-            Synchronize(UpdateComponent);
-            sleep(iThreadSleep);
+          if bSaveSVG = true then
+            sSVGfile := sSVGfile + '</svg>';
         except on E:Exception do
           ErrorString := 'Code could not be created (' +  E.Message + ')';
         end;
-        {else
-        begin
-          ErrorString := 'TTFQRBitmap.Canvas.BeginScene is false';
-          Synchronize(UpdateComponent);
-          sleep(iThreadSleep);
-        end;}
+
+        iPhase := 3;  // after
         Synchronize(UpdateComponent);
         sleep(iThreadSleep);
       finally
@@ -164,7 +186,7 @@ procedure TThreadingQRCodeGen.UpdateComponent;
 // synchronize procedure for thread
 begin
   if assigned(FTTmonitorUpdate) = true then
-     FTTmonitorUpdate(iPhase, ErrorString, TTFQRBitmap);
+     FTTmonitorUpdate(iPhase, ErrorString, TTFQRBitmap, sSVGfile);
   // clear buffer
   ErrorString := '';
 end;
@@ -184,16 +206,16 @@ end;
 
 { TgtQRCodeGenFMX & TThreadingQRCodeGen }
 
-procedure TgtQRCodeGenFMX.OnThreadUpdate(Phase: integer; Error: String; const aQRCode: TBitmap);
+procedure TgtQRCodeGenFMX.OnThreadUpdate(const Phase: integer; const Error: String; const aQRCode: TBitmap; const sSVGfile: string);
 // synchronize procedure for thread
 begin
   if (Phase = 1) and (assigned(FOnGenerateBefore) = true) then
-      FOnGenerateBefore(self,aQRCode);
+      FOnGenerateBefore(self,aQRCode,sSVGfile);
   if (Phase = 2) and (assigned(FOnGenerateDuring) = true) then
-      FOnGenerateDuring(self,aQRCode);
+      FOnGenerateDuring(self,aQRCode,sSVGfile);
   if (Phase = 3) and (assigned(FOnGenerateAfter) = true) then
     begin
-      FOnGenerateAfter(self,aQRCode);
+      FOnGenerateAfter(self,aQRCode,sSVGfile);
       DoGenQRCode(aQRCode);
     end;
 
@@ -258,6 +280,7 @@ procedure TgtQRCodeGenFMX.GenerateQRCode;
 begin
   FComponentThread := TThreadingQRCodeGen.Create(true);  // don't start yet monitor thread;
   try
+    FComponentThread.bSaveSVG := FSaveSVG;
     FComponentThread.FQR := TDelphiZXingQRCode.Create;
     FComponentThread.FQR.Data := FData;
     FComponentThread.FQR.Encoding := FMX.DelphiZXIngQRCode.TQRCodeEncoding(Ord(FEncoding));

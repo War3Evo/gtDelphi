@@ -13,6 +13,7 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  System.IoUtils,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ScrollBox,
   FMX.Memo, FMX.Objects, FMX.EditBox, FMX.SpinBox, FMX.ListBox,
   FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.Memo.Types,
@@ -42,18 +43,17 @@ type
     MemoData: TMemo;
     Label1: TLabel;
     Label7: TLabel;
+    SVGcheckbox: TCheckBox;
     procedure btnGenClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure gtQRCodeGenFMX1Error(Sender: TObject; Error: string);
     procedure gtQRCodeGenFMX1ImageControlFinish(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure gtQRCodeGenFMX1GenerateAfter(Sender: TObject;
-      const aQRCode: TBitmap);
-    procedure gtQRCodeGenFMX1GenerateDuring(Sender: TObject;
-      const aQRCode: TBitmap);
-    procedure gtQRCodeGenFMX1GenerateBefore(Sender: TObject;
-      const aQRCode: TBitmap);
+    procedure gtQRCodeGenFMX1GenerateAfter(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
+    procedure gtQRCodeGenFMX1GenerateDuring(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
+    procedure gtQRCodeGenFMX1GenerateBefore(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
     procedure FormShow(Sender: TObject);
+    procedure SVGcheckboxChange(Sender: TObject);
   private
 
   public
@@ -66,6 +66,7 @@ var
   //myImage: TImage;
   iCount: integer;
   iHeight, iWidth: integer;
+  sSVGFileContent: string;
 
 implementation
 
@@ -94,9 +95,22 @@ begin
 end;
 
 procedure TviewMain.btnSaveClick(Sender: TObject);
+var tmpS: string;
 begin
+  if gtQRCodeGenFMX1.SaveSVG = true then
+  begin
+    SD.DefaultExt := '*.svg';
+    SD.Filter := 'SVG (*.svg)|*.svg';
+    if SD.Execute then
+    begin
+      TFile.WriteAllText(SD.FileName, sSVGFileContent);
+    end;
+  end
+  else
   if not myBitmap.IsEmpty then
     begin
+      SD.DefaultExt := '*.bmp';
+      SD.Filter := 'Bitmap (*.bmp)|*.bmp';
       if SD.Execute then
         begin
           //Currently saves a 32 by 32 pixel file
@@ -127,14 +141,16 @@ begin
   mLog.Lines.Add('An Error Occur: ' + Error);
 end;
 
-procedure TviewMain.gtQRCodeGenFMX1GenerateAfter(Sender: TObject;
-  const aQRCode: TBitmap);
+procedure TviewMain.gtQRCodeGenFMX1GenerateAfter(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
 //var rSrc: TRectF;
   //  rDest: TRectF;
 begin
   //imgQRCode.Bitmap.Assign(aQRCode);
 
             myBitmap.Assign(aQRCode);
+            sSVGFileContent := sSVGfile;
+            MLog.Lines.Add('');
+            MLog.Lines.Add(sSVGfile);
 
         // RESIZE BITMAP
         {
@@ -181,8 +197,7 @@ begin
           end;    }
 end;
 
-procedure TviewMain.gtQRCodeGenFMX1GenerateBefore(Sender: TObject;
-  const aQRCode: TBitmap);
+procedure TviewMain.gtQRCodeGenFMX1GenerateBefore(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
 begin
             iCount := 0;
 
@@ -193,8 +208,7 @@ begin
             imgQRCode.Width := iWidth;
 end;
 
-procedure TviewMain.gtQRCodeGenFMX1GenerateDuring(Sender: TObject;
-  const aQRCode: TBitmap);
+procedure TviewMain.gtQRCodeGenFMX1GenerateDuring(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
           var rSrc: TRectF;
           var rDest: TRectF;
 begin
@@ -222,6 +236,11 @@ procedure TviewMain.gtQRCodeGenFMX1ImageControlFinish(Sender: TObject);
 begin
   mLog.Lines.Add('QRCode Generated');
   btnSave.Enabled := True;
+end;
+
+procedure TviewMain.SVGcheckboxChange(Sender: TObject);
+begin
+  gtQRCodeGenFMX1.SaveSVG := SVGcheckbox.Enabled;
 end;
 
 end.

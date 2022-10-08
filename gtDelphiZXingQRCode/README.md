@@ -3,6 +3,10 @@ gtDelphiZXingQRCode
 
 ### Threaded version of DelphiZXingQRCode ###
 
+10/08/2022
+
+** Added ability to generate SVG (needs external viewer to see SVG)
+
 10/07/2022
 
 **It's not multi-threaded, just threaded so your application can do other things while it's running in the background.**
