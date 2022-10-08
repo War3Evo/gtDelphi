@@ -18,6 +18,7 @@ uses
   FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.Memo.Types,
   gtQRCodeGenFMX, FMX.Layouts, Skia, Skia.FMX, FMX.Effects, FMX.Filter.Effects;
 
+
 type
   TviewMain = class(TForm)
     btnGen: TButton;
@@ -96,6 +97,12 @@ begin
       if SD.Execute then
         begin
           //Currently saves a 32 by 32 pixel file
+
+          //If windows
+          //if Pos('windows',TOSVersion.ToString)>0 then
+          //begin
+            //windows work around
+          //end;
 
           myBitmap.SaveToFile(SD.FileName);
         end;
