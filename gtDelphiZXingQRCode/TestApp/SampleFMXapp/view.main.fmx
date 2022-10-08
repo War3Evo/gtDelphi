@@ -26,8 +26,8 @@ object viewMain: TviewMain
         'UTF8NoBOM'
         'UTF8BOM')
       ItemIndex = 0
-      Position.X = 128.000000000000000000
-      Position.Y = 182.000000000000000000
+      Position.X = 80.000000000000000000
+      Position.Y = 169.000000000000000000
       Size.Width = 193.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
@@ -35,7 +35,7 @@ object viewMain: TviewMain
     end
     object Label2: TLabel
       Position.X = 8.000000000000000000
-      Position.Y = 182.000000000000000000
+      Position.Y = 169.000000000000000000
       Size.Width = 89.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -44,7 +44,7 @@ object viewMain: TviewMain
     end
     object Label3: TLabel
       Position.X = 8.000000000000000000
-      Position.Y = 214.000000000000000000
+      Position.Y = 199.000000000000000000
       Text = 'Quiet Zone'
       TabOrder = 3
     end
@@ -55,15 +55,15 @@ object viewMain: TviewMain
       Min = 1.000000000000000000
       Max = 6.000000000000000000
       Value = 4.000000000000000000
-      Position.X = 128.000000000000000000
-      Position.Y = 210.000000000000000000
+      Position.X = 80.000000000000000000
+      Position.Y = 199.000000000000000000
       Size.Width = 84.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
     end
     object btnGen: TButton
       Position.X = 17.000000000000000000
-      Position.Y = 269.000000000000000000
+      Position.Y = 283.000000000000000000
       TabOrder = 0
       Text = 'Generate'
       OnClick = btnGenClick
@@ -71,21 +71,21 @@ object viewMain: TviewMain
     object btnSave: TButton
       Enabled = False
       Position.X = 240.000000000000000000
-      Position.Y = 269.000000000000000000
+      Position.Y = 283.000000000000000000
       TabOrder = 8
       Text = 'Save to File'
       OnClick = btnSaveClick
     end
     object HeightEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 37
+      TabOrder = 36
       Text = '512'
       Position.X = 220.000000000000000000
-      Position.Y = 239.000000000000000000
+      Position.Y = 226.000000000000000000
     end
     object Label4: TLabel
-      Position.X = 128.000000000000000000
-      Position.Y = 279.000000000000000000
+      Position.X = 135.000000000000000000
+      Position.Y = 274.000000000000000000
       Size.Width = 77.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -94,7 +94,7 @@ object viewMain: TviewMain
     end
     object Label5: TLabel
       Position.X = 8.000000000000000000
-      Position.Y = 238.000000000000000000
+      Position.Y = 224.000000000000000000
       Size.Width = 56.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -103,7 +103,7 @@ object viewMain: TviewMain
     end
     object Label6: TLabel
       Position.X = 172.000000000000000000
-      Position.Y = 238.000000000000000000
+      Position.Y = 224.000000000000000000
       Size.Width = 40.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -115,7 +115,7 @@ object viewMain: TviewMain
       TabOrder = 39
       Text = '512'
       Position.X = 48.000000000000000000
-      Position.Y = 239.000000000000000000
+      Position.Y = 229.000000000000000000
     end
     object MemoHints: TMemo
       Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
@@ -216,6 +216,18 @@ object viewMain: TviewMain
       Text = 'Hints / Codes I'#39've found'
       TabOrder = 43
     end
+    object SVGcheckbox: TCheckBox
+      StyledSettings = [Family, Size, FontColor]
+      Position.X = 17.000000000000000000
+      Position.Y = 256.000000000000000000
+      Size.Width = 147.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 44
+      Text = 'Generate SVG File'
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      OnChange = SVGcheckboxChange
+    end
   end
   object mLog: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
@@ -224,40 +236,41 @@ object viewMain: TviewMain
     Margins.Left = 10.000000000000000000
     Margins.Right = 10.000000000000000000
     Position.X = 10.000000000000000000
-    Position.Y = 616.000000000000000000
+    Position.Y = 512.000000000000000000
     Size.Width = 601.000000000000000000
-    Size.Height = 47.000000000000000000
+    Size.Height = 151.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
     Viewport.Width = 597.000000000000000000
-    Viewport.Height = 43.000000000000000000
+    Viewport.Height = 147.000000000000000000
   end
   object SD: TSaveDialog
     DefaultExt = '*.bmp'
     Filter = 'Bitmap (*.bmp)|*.bmp'
-    Left = 176
-    Top = 536
+    Left = 16
+    Top = 328
   end
   object ScrollBox1: TScrollBox
     Align = Client
     Size.Width = 621.000000000000000000
-    Size.Height = 303.000000000000000000
+    Size.Height = 199.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 8
     Viewport.Width = 605.000000000000000000
-    Viewport.Height = 287.000000000000000000
+    Viewport.Height = 183.000000000000000000
     object imgQRCode: TImage
       MultiResBitmap = <
         item
         end>
       DisableInterpolation = True
-      Position.Y = -1.000000000000000000
+      Position.Y = 8.000000000000000000
       Size.Width = 621.000000000000000000
       Size.Height = 423.000000000000000000
       Size.PlatformDefault = False
     end
   end
   object gtQRCodeGenFMX1: TgtQRCodeGenFMX
+    SaveSVG = True
     Encoding = qrAuto
     ErrorCorrectionLevel = 3
     QuietZone = 0
@@ -268,7 +281,7 @@ object viewMain: TviewMain
     OnGenerateAfter = gtQRCodeGenFMX1GenerateAfter
     OnError = gtQRCodeGenFMX1Error
     OnImageControlFinish = gtQRCodeGenFMX1ImageControlFinish
-    Left = 192
-    Top = 328
+    Left = 56
+    Top = 344
   end
 end
