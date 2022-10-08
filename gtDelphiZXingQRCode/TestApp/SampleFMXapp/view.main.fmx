@@ -129,6 +129,8 @@ object viewMain: TviewMain
           'rue|false|blank>;;'
         'Sample: WIFI:S:MySSID;T:WPA;P:MyPassW0rd;;'
         ''
+        'https://en.wikipedia.org/wiki/VCard'
+        ''
         'BEGIN:VCARD'
         'VERSION:3.0'
         'N:Lastname;Firstname'
@@ -155,7 +157,12 @@ object viewMain: TviewMain
         'URL:https://steemit.com/@digitalfirehose'
         'URL:https://medium.com/@scottcdunn'
         'URL:https://thedigitalfirehose.blogspot.com/'
-        'END:VCARD')
+        'END:VCARD'
+        ''
+        'https://en.wikipedia.org/wiki/MeCard_(QR_code)'
+        ''
+        'MECARD:N:Doe,John;TEL:13035551212;EMAIL:john.doe@example.com;;'
+        '')
       Position.X = 360.000000000000000000
       Position.Y = 48.000000000000000000
       Size.Width = 253.000000000000000000
