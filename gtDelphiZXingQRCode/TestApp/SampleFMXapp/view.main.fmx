@@ -1,0 +1,274 @@
+object viewMain: TviewMain
+  Left = 0
+  Top = 0
+  Caption = 'gtQRCodeGenFMX'
+  ClientHeight = 663
+  ClientWidth = 621
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object grpConfig: TGroupBox
+    Align = MostTop
+    Size.Width = 621.000000000000000000
+    Size.Height = 313.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Settings'
+    TabOrder = 0
+    object edtEncoding: TComboBox
+      Items.Strings = (
+        'Auto'
+        'Numeric'
+        'Alphanumeric'
+        'ISO88591'
+        'UTF8NoBOM'
+        'UTF8BOM')
+      ItemIndex = 0
+      Position.X = 128.000000000000000000
+      Position.Y = 182.000000000000000000
+      Size.Width = 193.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+    end
+    object Label2: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 182.000000000000000000
+      Size.Width = 89.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Encoding'
+      TabOrder = 2
+    end
+    object Label3: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 214.000000000000000000
+      Text = 'Quiet Zone'
+      TabOrder = 3
+    end
+    object edtQZone: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 4
+      Cursor = crIBeam
+      Min = 1.000000000000000000
+      Max = 6.000000000000000000
+      Value = 4.000000000000000000
+      Position.X = 128.000000000000000000
+      Position.Y = 210.000000000000000000
+      Size.Width = 84.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object btnGen: TButton
+      Position.X = 17.000000000000000000
+      Position.Y = 269.000000000000000000
+      TabOrder = 0
+      Text = 'Generate'
+      OnClick = btnGenClick
+    end
+    object btnSave: TButton
+      Enabled = False
+      Position.X = 240.000000000000000000
+      Position.Y = 269.000000000000000000
+      TabOrder = 8
+      Text = 'Save to File'
+      OnClick = btnSaveClick
+    end
+    object HeightEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 37
+      Text = '512'
+      Position.X = 220.000000000000000000
+      Position.Y = 239.000000000000000000
+    end
+    object Label4: TLabel
+      Position.X = 128.000000000000000000
+      Position.Y = 279.000000000000000000
+      Size.Width = 77.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Label4'
+      TabOrder = 11
+    end
+    object Label5: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 238.000000000000000000
+      Size.Width = 56.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Width'
+      TabOrder = 38
+    end
+    object Label6: TLabel
+      Position.X = 172.000000000000000000
+      Position.Y = 238.000000000000000000
+      Size.Width = 40.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Height'
+      TabOrder = 16
+    end
+    object WidthEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 39
+      Text = '512'
+      Position.X = 48.000000000000000000
+      Position.Y = 239.000000000000000000
+    end
+    object MemoHints: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Lines.Strings = (
+        'tel:+11234567890'
+        ''
+        'Joining a Wi'#8209'Fi network'
+        
+          'Common format: WIFI:S:<SSID>;T:<WEP|WPA|blank>;P:<PASSWORD>;H:<t' +
+          'rue|false|blank>;;'
+        'Sample: WIFI:S:MySSID;T:WPA;P:MyPassW0rd;;'
+        ''
+        'https://en.wikipedia.org/wiki/VCard'
+        ''
+        'BEGIN:VCARD'
+        'VERSION:3.0'
+        'N:Lastname;Firstname'
+        'FN:Firstname Lastname'
+        'ORG:CompanyName'
+        'TITLE:JobTitle'
+        'ADR:;;123 Sesame St;SomeCity;CA;12345;USA'
+        'TEL;WORK;VOICE:1234567890'
+        'TEL;CELL:Mobile'
+        'TEL;FAX:'
+        'EMAIL;WORK;INTERNET:foo@email.com'
+        'URL:http://website.com'
+        'END:VCARD'
+        ''
+        'BEGIN:VCARD'
+        'VERSION:2.1'
+        'N:Scott C. Dunn'
+        'ORG:Me'
+        'TITLE:Writer'
+        'TEL;MOBILE;VOICE:123-456-7890'
+        'ADR:123 No Name Street'
+        'Salt Lake City, Utah 84119'
+        'EMAIL:scott@scottcdunn.com'
+        'URL:https://steemit.com/@digitalfirehose'
+        'URL:https://medium.com/@scottcdunn'
+        'URL:https://thedigitalfirehose.blogspot.com/'
+        'END:VCARD'
+        ''
+        'https://en.wikipedia.org/wiki/MeCard_(QR_code)'
+        ''
+        'MECARD:N:Doe,John;TEL:13035551212;EMAIL:john.doe@example.com;;'
+        '')
+      Position.X = 360.000000000000000000
+      Position.Y = 48.000000000000000000
+      Size.Width = 253.000000000000000000
+      Size.Height = 243.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 40
+      Viewport.Width = 233.000000000000000000
+      Viewport.Height = 223.000000000000000000
+    end
+    object MemoData: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Lines.Strings = (
+        'BEGIN:VCARD'
+        'VERSION:3.0'
+        'N:Lastname;Firstname'
+        'FN:Firstname Lastname'
+        'ORG:CompanyName'
+        'TITLE:JobTitle'
+        'ADR:;;123 Sesame St;SomeCity;CA;12345;USA'
+        'TEL;WORK;VOICE:1234567890'
+        'TEL;CELL:Mobile'
+        'TEL;FAX:'
+        'EMAIL;WORK;INTERNET:foo@email.com'
+        'URL:http://website.com'
+        'END:VCARD')
+      Position.X = 8.000000000000000000
+      Position.Y = 48.000000000000000000
+      Size.Width = 329.000000000000000000
+      Size.Height = 113.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 41
+      Viewport.Width = 309.000000000000000000
+      Viewport.Height = 109.000000000000000000
+    end
+    object Label1: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 23.000000000000000000
+      Size.Width = 329.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Enter QRcode text below:'
+      TabOrder = 42
+    end
+    object Label7: TLabel
+      Position.X = 360.000000000000000000
+      Position.Y = 23.000000000000000000
+      Size.Width = 253.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Hints / Codes I'#39've found'
+      TabOrder = 43
+    end
+  end
+  object mLog: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = MostBottom
+    Margins.Left = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 616.000000000000000000
+    Size.Width = 601.000000000000000000
+    Size.Height = 47.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Viewport.Width = 597.000000000000000000
+    Viewport.Height = 43.000000000000000000
+  end
+  object SD: TSaveDialog
+    DefaultExt = '*.bmp'
+    Filter = 'Bitmap (*.bmp)|*.bmp'
+    Left = 176
+    Top = 536
+  end
+  object ScrollBox1: TScrollBox
+    Align = Client
+    Size.Width = 621.000000000000000000
+    Size.Height = 303.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    Viewport.Width = 605.000000000000000000
+    Viewport.Height = 287.000000000000000000
+    object imgQRCode: TImage
+      MultiResBitmap = <
+        item
+        end>
+      DisableInterpolation = True
+      Position.Y = -1.000000000000000000
+      Size.Width = 621.000000000000000000
+      Size.Height = 423.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object gtQRCodeGenFMX1: TgtQRCodeGenFMX
+    Encoding = qrAuto
+    ErrorCorrectionLevel = 3
+    QuietZone = 0
+    ImageControl = imgQRCode
+    ThreadSleep = 0
+    OnGenerateBefore = gtQRCodeGenFMX1GenerateBefore
+    OnGenerateDuring = gtQRCodeGenFMX1GenerateDuring
+    OnGenerateAfter = gtQRCodeGenFMX1GenerateAfter
+    OnError = gtQRCodeGenFMX1Error
+    OnImageControlFinish = gtQRCodeGenFMX1ImageControlFinish
+    Left = 192
+    Top = 328
+  end
+end
