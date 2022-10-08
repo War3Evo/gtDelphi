@@ -22,7 +22,6 @@ uses
 type
   TviewMain = class(TForm)
     btnGen: TButton;
-    edtData: TEdit;
     grpConfig: TGroupBox;
     edtEncoding: TComboBox;
     Label2: TLabel;
@@ -39,6 +38,10 @@ type
     Label6: TLabel;
     HeightEdit: TEdit;
     ScrollBox1: TScrollBox;
+    MemoHints: TMemo;
+    MemoData: TMemo;
+    Label1: TLabel;
+    Label7: TLabel;
     procedure btnGenClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure gtQRCodeGenFMX1Error(Sender: TObject; Error: string);
@@ -74,16 +77,16 @@ procedure TviewMain.btnGenClick(Sender: TObject);
 begin
     mLog.Lines.Clear;
 
-  if trim(edtData.Text) = '' then
+  if trim(MemoData.Text) = '' then
     begin
       ShowMessage('Enter with QRCode data');
-      edtData.SetFocus;
+      MemoData.SetFocus;
       exit;
     end;
   btnSave.Enabled := False;
   With gtQRCodeGenFMX1 do
     begin
-      Data := Trim(edtData.Text);
+      Data := Trim(MemoData.Text);
       Encoding := TQRCodeEncoding(edtEncoding.Selected.Index);
       QuietZone := StrToIntDef(edtQZone.Text,4);
       GenerateQRCode;
