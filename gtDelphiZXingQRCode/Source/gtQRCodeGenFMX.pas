@@ -152,9 +152,11 @@ begin
           iPhase := 2;  // during
           for Row := 0 to Pred(FQR.Rows) do
             begin
+              if Terminated = true then exit;
               FiFillColorX := Row;
               for Col := 0 to Pred(FQR.Columns) do
                 begin
+                  if Terminated = true then exit;
                   FiFillColorY := Col;
                   if qrSVG in FThreadQRCodeFileFormat then
                   begin
