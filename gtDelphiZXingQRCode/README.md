@@ -3,6 +3,24 @@ gtDelphiZXingQRCode
 
 ### Threaded version of DelphiZXingQRCode ###
 
+10/09/2022
+
+*** COLORing Pixels Work! ***
+
+Many Thanks to Vinícius Felipe Botelho Barbosa of https://github.com/viniciusfbb for the help with developing SVG code that is compatible with Skia4Delphi
+
+Use the SampleFMX.dproj in ./TestApp/SampleFMXapp for example code
+
+* Added OnFillColor event -allows you to change the pixel colors as the QRcode is developed
+- with OnFillColor, you can change the variables inside the event to change the colors
+- OnFillColor also gives you the x,y cords
+* Added MultiSelectFileFormat property - allows you to either generate SVG or BMP or both
+* Changed OnImageControlFinish to OnGenerateFinally event
+* Added UseInnerStyleSVG (default is true)
+- Set to false for Skia4Delphi
+* Added OnLoad
+- OnLoad happens after OnCreate and all the default values are set
+
 10/08/2022
 
 ** Added ability to generate SVG (needs external viewer to see SVG)

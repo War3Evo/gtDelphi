@@ -17,7 +17,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ScrollBox,
   FMX.Memo, FMX.Objects, FMX.EditBox, FMX.SpinBox, FMX.ListBox,
   FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.Memo.Types,
-  gtQRCodeGenFMX, FMX.Layouts, Skia, Skia.FMX, FMX.Effects, FMX.Filter.Effects;
+  gtQRCodeGenFMX, FMX.Layouts, FMX.Effects, FMX.Filter.Effects, FMX.Colors;
 
 
 type
@@ -44,16 +44,30 @@ type
     Label1: TLabel;
     Label7: TLabel;
     SVGcheckbox: TCheckBox;
+    BMPcheckbox: TCheckBox;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    ColorComboBox1: TColorComboBox;
+    Label12: TLabel;
+    ColorComboBox2: TColorComboBox;
     procedure btnGenClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
     procedure gtQRCodeGenFMX1Error(Sender: TObject; Error: string);
-    procedure gtQRCodeGenFMX1ImageControlFinish(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure gtQRCodeGenFMX1GenerateAfter(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
-    procedure gtQRCodeGenFMX1GenerateDuring(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
-    procedure gtQRCodeGenFMX1GenerateBefore(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
     procedure FormShow(Sender: TObject);
     procedure SVGcheckboxChange(Sender: TObject);
+    procedure BMPcheckboxChange(Sender: TObject);
+    procedure gtQRCodeGenFMX1GenerateFinally(Sender: TObject);
+    procedure gtQRCodeGenFMX1GenerateBefore(Sender: TObject; const x,
+      y: Integer; const aQRCode: TBitmap; const sSVGfile: string);
+    procedure gtQRCodeGenFMX1GenerateDuring(Sender: TObject; const x,
+      y: Integer; const aQRCode: TBitmap; const sSVGfile: string);
+    procedure gtQRCodeGenFMX1GenerateAfter(Sender: TObject; const x, y: Integer;
+      const aQRCode: TBitmap; const sSVGfile: string);
+    procedure gtQRCodeGenFMX1FillColor(const x, y: Integer;
+      var sFillColorSVG: string; var TAlphaColorBMP: TAlphaColor);
   private
 
   public
@@ -64,7 +78,7 @@ var
   viewMain: TviewMain;
   myBitmap: TBitmap;
   //myImage: TImage;
-  iCount: integer;
+  //iCount: integer;
   iHeight, iWidth: integer;
   sSVGFileContent: string;
 
@@ -97,17 +111,17 @@ end;
 procedure TviewMain.btnSaveClick(Sender: TObject);
 var tmpS: string;
 begin
-  if gtQRCodeGenFMX1.SaveSVG = true then
-  begin
-    SD.DefaultExt := '*.svg';
-    SD.Filter := 'SVG (*.svg)|*.svg';
-    if SD.Execute then
+  if qrSVG in gtQRCodeGenFMX1.MultiSelectFileFormat then
     begin
-      TFile.WriteAllText(SD.FileName, sSVGFileContent);
+      SD.DefaultExt := '*.svg';
+      SD.Filter := 'SVG (*.svg)|*.svg';
+      if SD.Execute then
+      begin
+        TFile.WriteAllText(SD.FileName, sSVGFileContent);
+      end;
     end;
-  end
-  else
-  if not myBitmap.IsEmpty then
+
+  if ((qrBMP in gtQRCodeGenFMX1.MultiSelectFileFormat) and (not myBitmap.IsEmpty)) then
     begin
       SD.DefaultExt := '*.bmp';
       SD.Filter := 'Bitmap (*.bmp)|*.bmp';
@@ -134,6 +148,16 @@ end;
 procedure TviewMain.FormShow(Sender: TObject);
 begin
   myBitmap := TBitmap.Create;
+
+  if qrSVG in gtQRCodeGenFMX1.MultiSelectFileFormat then
+    SVGcheckbox.IsChecked := true
+  else
+    SVGcheckbox.IsChecked := false;
+  if qrBMP in gtQRCodeGenFMX1.MultiSelectFileFormat then
+    BMPcheckbox.IsChecked := true
+  else
+    BMPcheckbox.IsChecked := false;
+  edtQZone.Value := gtQRCodeGenFMX1.QuietZone;
 end;
 
 procedure TviewMain.gtQRCodeGenFMX1Error(Sender: TObject; Error: string);
@@ -141,7 +165,18 @@ begin
   mLog.Lines.Add('An Error Occur: ' + Error);
 end;
 
-procedure TviewMain.gtQRCodeGenFMX1GenerateAfter(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
+procedure TviewMain.gtQRCodeGenFMX1FillColor(const x, y: Integer;
+  var sFillColorSVG: string; var TAlphaColorBMP: TAlphaColor);
+begin
+  if sFillColorSVG = 'black' then sFillColorSVG := ColorComboBox1.Selected.Text;
+  if TAlphaColorBMP = talphacolors.Black then TAlphaColorBMP := ColorComboBox1.Color;
+
+  if sFillColorSVG = 'white' then sFillColorSVG := ColorComboBox2.Selected.Text;
+  if TAlphaColorBMP = talphacolors.White then TAlphaColorBMP := ColorComboBox2.Color;
+end;
+
+procedure TviewMain.gtQRCodeGenFMX1GenerateAfter(Sender: TObject; const x,
+  y: Integer; const aQRCode: TBitmap; const sSVGfile: string);
 //var rSrc: TRectF;
   //  rDest: TRectF;
 begin
@@ -197,9 +232,10 @@ begin
           end;    }
 end;
 
-procedure TviewMain.gtQRCodeGenFMX1GenerateBefore(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
+procedure TviewMain.gtQRCodeGenFMX1GenerateBefore(Sender: TObject; const x,
+  y: Integer; const aQRCode: TBitmap; const sSVGfile: string);
 begin
-            iCount := 0;
+            //iCount := 0;
 
             iWidth := StrToInt(Trim(WidthEdit.Text));
             iHeight := StrToInt(Trim(HeightEdit.Text));
@@ -208,7 +244,8 @@ begin
             imgQRCode.Width := iWidth;
 end;
 
-procedure TviewMain.gtQRCodeGenFMX1GenerateDuring(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string);
+procedure TviewMain.gtQRCodeGenFMX1GenerateDuring(Sender: TObject; const x,
+  y: Integer; const aQRCode: TBitmap; const sSVGfile: string);
           var rSrc: TRectF;
           var rDest: TRectF;
 begin
@@ -228,11 +265,12 @@ begin
               imgQRCode.Bitmap.Canvas.EndScene;
             end;
 
-  inc(iCount);
-  label4.Text := iCount.ToString;
+  //inc(iCount);
+  label4.Text := x.ToString;
+  Label8.Text := y.ToString;
 end;
 
-procedure TviewMain.gtQRCodeGenFMX1ImageControlFinish(Sender: TObject);
+procedure TviewMain.gtQRCodeGenFMX1GenerateFinally(Sender: TObject);
 begin
   mLog.Lines.Add('QRCode Generated');
   btnSave.Enabled := True;
@@ -240,7 +278,18 @@ end;
 
 procedure TviewMain.SVGcheckboxChange(Sender: TObject);
 begin
-  gtQRCodeGenFMX1.SaveSVG := SVGcheckbox.Enabled;
+  if SVGcheckbox.IsChecked = true then
+    gtQRCodeGenFMX1.MultiSelectFileFormat := gtQRCodeGenFMX1.MultiSelectFileFormat + [qrSVG]
+  else
+    gtQRCodeGenFMX1.MultiSelectFileFormat := gtQRCodeGenFMX1.MultiSelectFileFormat - [qrSVG];
+end;
+
+procedure TviewMain.BMPcheckboxChange(Sender: TObject);
+begin
+  if BMPcheckbox.IsChecked = true then
+    gtQRCodeGenFMX1.MultiSelectFileFormat := gtQRCodeGenFMX1.MultiSelectFileFormat + [qrBMP]
+  else
+    gtQRCodeGenFMX1.MultiSelectFileFormat := gtQRCodeGenFMX1.MultiSelectFileFormat - [qrBMP];
 end;
 
 end.

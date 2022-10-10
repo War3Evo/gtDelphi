@@ -14,34 +14,48 @@ uses
 type
   TQRCodeEncoding = (qrAuto, qrNumeric, qrAlphanumeric, qrISO88591, qrUTF8NoBOM, qrUTF8BOM);
 
+  TQRCodeFileFormat = set of (qrSVG, qrBMP); // choose to create one or both at the same time
+
+  TOnFillColor = procedure(const x,y: integer; var sFillColorSVG: string; var TAlphaColorBMP: TAlphaColor) of object;
+
   //TOnGenerate = procedure(Sender: TObject; Tempo: Integer; const aQRCode: TBitmap) of object;
 
-  TOnGenerate = procedure(Sender: TObject; const aQRCode: TBitmap; const sSVGfile: string) of object;
+  TOnGenerate = procedure(Sender: TObject; const x,y: integer; const aQRCode: TBitmap; const sSVGfile: string) of object;
   TOnError = procedure(Sender: TObject; Error: String) of object;
   TOnFinish = procedure(Sender: TObject) of object;
 
+  TOnLoad = procedure(Sender: TObject) of object;
+
   // Add threading
-  TTmonitorUpdate = procedure(const Phase: integer; const Error: String; const aQRCode: TBitmap; const sSVGfile: string) of object;
+  TTmonitorUpdate = procedure(const Phase: integer; const Error: String; const x,y: integer; const aQRCode: TBitmap; const sSVGfile: string) of object;
 
   TThreadingQRCodeGen = class(TThread)  // pipe monitoring thread for console output
   private
     iThreadSleep: Cardinal;
-    //TextString: String;
     iPhase: integer;
     ErrorString: String;
     TTFQRBitmap: TBitmap;
     FTTmonitorUpdate: TTmonitorUpdate;
 
-    bSaveSVG: boolean;
-    sSVGfile: String;
+    sThreadSVGfile: String;
+    FThreadQRCodeFileFormat: TQRCodeFileFormat;
+    FThreadUseInnerStyleSVG: boolean;
+    FTOnFillColor: TOnFillColor;
+    FsFillColor: string;
+    FiFillColorX: integer;
+    FiFillColorY: integer;
+    FThreadbCanChangeFillColor: boolean;
+    FTAlphaColorBMP: TAlphaColor;
 
     FQR: TDelphiZXingQRCode;     //where the magic happens
 
     procedure UpdateComponent;
+    procedure UpdateFillColor;
   protected
     procedure Execute; override;
   public
     property OnUpdateComponent: TTmonitorUpdate read FTTmonitorUpdate write FTTmonitorUpdate;
+    property OnFillColorUpdateComponent: TOnFillColor read FTOnFillColor write FTOnFillColor;
   end;
 
   TgtQRCodeGenFMX = class(TComponent)
@@ -51,7 +65,12 @@ type
 
     FComponentThread: TThreadingQRCodeGen;
 
-    FSaveSVG: boolean;
+    FQRCodeFileFormat: TQRCodeFileFormat;
+    FUseInnerStyleSVG: boolean;
+    FOnFillColor: TOnFillColor;
+    FbCanChangeFillColor: boolean;
+
+    FOnLoad: TOnLoad;
 
     FData: String;           //QR code information
     FEncoding: TQRCodeEncoding;  //Kind of text
@@ -67,7 +86,8 @@ type
     procedure DoGenQRCode(const aQRCode: TBitmap);
     procedure setImageControl(const Value: TImage);
 
-    procedure OnThreadUpdate(const Phase: integer; const Error: String; const aQRCode: TBitmap; const sSVGfile: string);
+    procedure OnThreadUpdate(const Phase: integer; const Error: String; const x,y: integer; const aQRCode: TBitmap; const sSVGfile: string);
+    procedure OnThreadFillColorUpdate(const x,y: integer; var sFillColorSVG: string; var TAlphaColorBMP: TAlphaColor);
   protected
     procedure DoOnError(ErrorMsg: String);
     procedure fDoSetErrorCorrectionLevel(value: integer);
@@ -77,7 +97,12 @@ type
     procedure GenerateQRCode;
     procedure Stop;
   published
-    property SaveSVG: boolean read FSaveSVG write FSaveSVG;
+    property MultiSelectFileFormat: TQRCodeFileFormat read FQRCodeFileFormat write FQRCodeFileFormat;
+
+    property UseInnerStyleSVG: boolean read FUseInnerStyleSVG write FUseInnerStyleSVG;
+
+    property CanChangeFillColor: boolean read FbCanChangeFillColor write FbCanChangeFillColor default false;
+
     property Data: String read FData write FData;
     property Encoding: TQRCodeEncoding read FEncoding write FEncoding;
     property ErrorCorrectionLevel: integer read FqrErrorCorrectionLevel write fDoSetErrorCorrectionLevel;
@@ -90,7 +115,9 @@ type
     property OnGenerateDuring: TOnGenerate read FOnGenerateDuring write FOnGenerateDuring;   // As the Bitmap is updated
     property OnGenerateAfter: TOnGenerate read FOnGenerateAfter write FOnGenerateAfter;    // Done
     property OnError: TOnError read FOnError write FOnError;
-    property OnImageControlFinish: TOnFinish read FOnFinish write FOnFinish;
+    property OnGenerateFinally: TOnFinish read FOnFinish write FOnFinish;
+    property OnFillColor: TOnFillColor read FOnFillColor write FOnFillColor;   // only if CanChangeFillColor is true
+    property OnLoad: TOnLoad read FOnLoad write FOnLoad;
   end;
 
 procedure Register;
@@ -112,7 +139,7 @@ var
   PixelC: TAlphaColor;
   FillString: string;
 begin
-      sSVGfile := '';
+      sThreadSVGfile := '';
       try
         TTFQRBitmap := TBitmap.Create;
         iPhase := 1; // before
@@ -120,35 +147,65 @@ begin
         sleep(iThreadSleep);
         try
           TTFQRBitmap.SetSize(FQR.Rows, FQR.Columns);
-          if bSaveSVG = true then
-            sSVGfile := sSVGfile + '<svg viewBox="0 0 ' + FQR.Rows.ToString + ' ' + FQR.Columns.ToString + '" xmlns="http://www.w3.org/2000/svg">';
+          if qrSVG in FThreadQRCodeFileFormat then
+            sThreadSVGfile := sThreadSVGfile + '<svg viewBox="0 0 ' + FQR.Rows.ToString + ' ' + FQR.Columns.ToString + '" xmlns="http://www.w3.org/2000/svg">';
           iPhase := 2;  // during
           for Row := 0 to Pred(FQR.Rows) do
             begin
+              FiFillColorX := Row;
               for Col := 0 to Pred(FQR.Columns) do
                 begin
-                  if bSaveSVG = true then
+                  FiFillColorY := Col;
+                  if qrSVG in FThreadQRCodeFileFormat then
                   begin
                     if FQR.IsBlack[Row,Col] then
                       FillString := 'black'
                     else
                       FillString := 'white';
+                    // Ability to change Fill Color
+                    //if FThreadbCanChangeFillColor = true then    //May use this if the other doesn't work
+                    if assigned(FTOnFillColor) then
+                    begin
+                      // Assign Fill color
+                      FsFillColor := FillString;
+                      Synchronize(UpdateFillColor);
+                      // Reassign Fill color
+                      FillString := FsFillColor;
+                    end;
                     // Create SVG Rect
-                    sSVGfile := sSVGfile + '<rect ';
-                    sSVGfile := sSVGfile + 'width="1" ';
-                    sSVGfile := sSVGfile + 'height="1" ';
-                    sSVGfile := sSVGfile + 'x="' + Row.ToString + '" ';
-                    sSVGfile := sSVGfile + 'y="' + Col.ToString + '" ';
-                    sSVGfile := sSVGfile + 'style="fill: ' + FillString + '; ';
-                    sSVGfile := sSVGfile + 'stroke: ' + FillString + '; ';
-                    sSVGfile := sSVGfile + 'stroke-width: 1;" />';
-                  end
-                  else
+                    sThreadSVGfile := sThreadSVGfile + '<rect ';
+                    sThreadSVGfile := sThreadSVGfile + 'width="1" ';
+                    sThreadSVGfile := sThreadSVGfile + 'height="1" ';
+                    sThreadSVGfile := sThreadSVGfile + 'x="' + Row.ToString + '" ';
+                    sThreadSVGfile := sThreadSVGfile + 'y="' + Col.ToString + '" ';
+                    if FThreadUseInnerStyleSVG = true then
+                    begin
+                      sThreadSVGfile := sThreadSVGfile + 'style="fill: ' + FillString + '; ';
+                      sThreadSVGfile := sThreadSVGfile + 'stroke: ' + FillString + '; ';
+                      sThreadSVGfile := sThreadSVGfile + 'stroke-width: 1;" />';
+                    end
+                    else
+                    begin    // To be compatible with Skia4Delphi (Credit to viniciusfbb https://github.com/viniciusfbb)
+                      sThreadSVGfile := sThreadSVGfile + 'fill="' + FillString + '" ';
+                      sThreadSVGfile := sThreadSVGfile + 'stroke="' + FillString + '" ';
+                      sThreadSVGfile := sThreadSVGfile + 'stroke-width="1" />';
+                    end;
+                  end;
+
+                  if qrBMP in FThreadQRCodeFileFormat then
                   begin
                     if FQR.IsBlack[Row,Col] then
                       PixelC := talphacolors.Black
                     else
                       PixelC := talphacolors.White;
+                    if assigned(FTOnFillColor) then
+                    begin
+                      // Assign Fill color
+                      FTAlphaColorBMP := PixelC;
+                      Synchronize(UpdateFillColor);
+                      // Reassign Fill color
+                      PixelC:= FTAlphaColorBMP;
+                    end;
                     if TTFQRBitmap.Map(TMapAccess.Write, bitdata) then
                       begin
                         Try
@@ -164,8 +221,8 @@ begin
                 Synchronize(UpdateComponent);
                 sleep(iThreadSleep);
             end;
-          if bSaveSVG = true then
-            sSVGfile := sSVGfile + '</svg>';
+          if qrSVG in FThreadQRCodeFileFormat then
+            sThreadSVGfile := sThreadSVGfile + '</svg>';
         except on E:Exception do
           ErrorString := 'Code could not be created (' +  E.Message + ')';
         end;
@@ -186,9 +243,16 @@ procedure TThreadingQRCodeGen.UpdateComponent;
 // synchronize procedure for thread
 begin
   if assigned(FTTmonitorUpdate) = true then
-     FTTmonitorUpdate(iPhase, ErrorString, TTFQRBitmap, sSVGfile);
+     FTTmonitorUpdate(iPhase, ErrorString, FiFillColorX, FiFillColorY, TTFQRBitmap, sThreadSVGfile);
   // clear buffer
   ErrorString := '';
+end;
+
+procedure TThreadingQRCodeGen.UpdateFillColor;
+// synchronize procedure for thread
+begin
+  if assigned(FTOnFillColor) = true then
+     FTOnFillColor(FiFillColorX,FiFillColorY,FsFillColor,FTAlphaColorBMP);
 end;
 
 procedure TgtQRCodeGenFMX.fDoSetErrorCorrectionLevel(value: integer);
@@ -206,16 +270,16 @@ end;
 
 { TgtQRCodeGenFMX & TThreadingQRCodeGen }
 
-procedure TgtQRCodeGenFMX.OnThreadUpdate(const Phase: integer; const Error: String; const aQRCode: TBitmap; const sSVGfile: string);
+procedure TgtQRCodeGenFMX.OnThreadUpdate(const Phase: integer; const Error: String; const x,y: integer; const aQRCode: TBitmap; const sSVGfile: string);
 // synchronize procedure for thread
 begin
   if (Phase = 1) and (assigned(FOnGenerateBefore) = true) then
-      FOnGenerateBefore(self,aQRCode,sSVGfile);
+      FOnGenerateBefore(self,x,y,aQRCode,sSVGfile);
   if (Phase = 2) and (assigned(FOnGenerateDuring) = true) then
-      FOnGenerateDuring(self,aQRCode,sSVGfile);
+      FOnGenerateDuring(self,x,y,aQRCode,sSVGfile);
   if (Phase = 3) and (assigned(FOnGenerateAfter) = true) then
     begin
-      FOnGenerateAfter(self,aQRCode,sSVGfile);
+      FOnGenerateAfter(self,x,y,aQRCode,sSVGfile);
       DoGenQRCode(aQRCode);
     end;
 
@@ -223,13 +287,26 @@ begin
       if Error <> '' then FOnError(self, String(Error));
 end;
 
+procedure TgtQRCodeGenFMX.OnThreadFillColorUpdate(const x,y: integer; var sFillColorSVG: string; var TAlphaColorBMP: TAlphaColor);
+begin
+  if assigned(FOnFillColor) = true then
+  begin
+    FOnFillColor(x,y,sFillColorSVG,TAlphaColorBMP);
+  end;
+end;
+
 { TgtQRCodeGenFMX }
 
 constructor TgtQRCodeGenFMX.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
+  FbCanChangeFillColor := false; // unused right now
+  FUseInnerStyleSVG := true; // change to false if using Skia4Delphi
+  FQRCodeFileFormat := [qrSVG];
   FThreadDone := true;
   FThreadSleep := 40;
+  if assigned(FOnLoad) then
+    FOnLoad(aOwner);
 end;
 
 {destructor TgtQRCodeGenFMX.Destroy;
@@ -280,7 +357,9 @@ procedure TgtQRCodeGenFMX.GenerateQRCode;
 begin
   FComponentThread := TThreadingQRCodeGen.Create(true);  // don't start yet monitor thread;
   try
-    FComponentThread.bSaveSVG := FSaveSVG;
+    FComponentThread.FThreadQRCodeFileFormat := FQRCodeFileFormat;
+    FComponentThread.FThreadUseInnerStyleSVG := FUseInnerStyleSVG;
+    FComponentThread.FThreadbCanChangeFillColor := FbCanChangeFillColor;
     FComponentThread.FQR := TDelphiZXingQRCode.Create;
     FComponentThread.FQR.Data := FData;
     FComponentThread.FQR.Encoding := FMX.DelphiZXIngQRCode.TQRCodeEncoding(Ord(FEncoding));
@@ -290,6 +369,7 @@ begin
     FComponentThread.iThreadSleep := FThreadSleep; // default is 40
     FComponentThread.FreeOnTerminate := true;
     FComponentThread.OnUpdateComponent := OnThreadUpdate;
+    FComponentThread.OnFillColorUpdateComponent := OnThreadFillColorUpdate;
     FThreadDone := false;
     FComponentThread.Start; // start thread;
   except

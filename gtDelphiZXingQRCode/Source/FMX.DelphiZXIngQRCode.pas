@@ -1637,7 +1637,7 @@ begin
   if (EncodeOptions = 4) then
   begin
     // Add the UTF-8 BOM
-    UTF8Version := #$EF#$BB#$BF + UTF8Encode(Content);
+    UTF8Version := #$EF#$BB#$BF + String(UTF8Encode(Content));
     SetLength(Bytes, Length(UTF8Version));
     if (Length(UTF8Version) > 0) then
     begin
@@ -1647,7 +1647,7 @@ begin
   if (EncodeOptions = 5) then
   begin
     // No BOM
-    UTF8Version := UTF8Encode(Content);
+    UTF8Version := String(UTF8Encode(Content));
     SetLength(Bytes, Length(UTF8Version));
     if (Length(UTF8Version) > 0) then
     begin
