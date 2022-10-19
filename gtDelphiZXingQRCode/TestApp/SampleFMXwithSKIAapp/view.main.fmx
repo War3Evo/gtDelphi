@@ -1,0 +1,491 @@
+object viewMain: TviewMain
+  Left = 0
+  Top = 0
+  Caption = 'gtQRCodeFMX_Skia'
+  ClientHeight = 743
+  ClientWidth = 762
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object grpConfig: TGroupBox
+    Align = MostTop
+    Size.Width = 762.000000000000000000
+    Size.Height = 369.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Settings'
+    TabOrder = 0
+    object edtEncoding: TComboBox
+      Items.Strings = (
+        'Auto'
+        'Numeric'
+        'Alphanumeric'
+        'ISO88591'
+        'UTF8NoBOM'
+        'UTF8BOM')
+      ItemIndex = 0
+      Position.X = 88.000000000000000000
+      Position.Y = 257.000000000000000000
+      Size.Width = 193.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+    end
+    object Label2: TLabel
+      Position.X = 16.000000000000000000
+      Position.Y = 257.000000000000000000
+      Size.Width = 89.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Encoding'
+      TabOrder = 2
+    end
+    object Label3: TLabel
+      Position.X = 16.000000000000000000
+      Position.Y = 287.000000000000000000
+      Text = 'Quiet Zone'
+      TabOrder = 3
+    end
+    object edtQZone: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 4
+      Cursor = crIBeam
+      Min = 1.000000000000000000
+      Max = 6.000000000000000000
+      Value = 4.000000000000000000
+      Position.X = 88.000000000000000000
+      Position.Y = 287.000000000000000000
+      Size.Width = 84.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object btnGen: TButton
+      Position.X = 372.000000000000000000
+      Position.Y = 309.000000000000000000
+      Size.Width = 125.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Generate'
+      OnClick = btnGenClick
+    end
+    object btnSave: TButton
+      Enabled = False
+      Position.X = 372.000000000000000000
+      Position.Y = 339.000000000000000000
+      Size.Width = 125.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 8
+      Text = 'Save to File'
+      OnClick = btnSaveClick
+    end
+    object HeightEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 36
+      Text = '256'
+      Position.X = 178.000000000000000000
+      Position.Y = 317.000000000000000000
+      Enabled = False
+      Size.Width = 53.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Label4: TLabel
+      Position.X = 527.000000000000000000
+      Position.Y = 270.000000000000000000
+      Size.Width = 42.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Label4'
+      TabOrder = 11
+    end
+    object Label5: TLabel
+      Position.X = 16.000000000000000000
+      Position.Y = 312.000000000000000000
+      Size.Width = 56.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Width'
+      TabOrder = 38
+    end
+    object Label6: TLabel
+      Position.X = 130.000000000000000000
+      Position.Y = 312.000000000000000000
+      Size.Width = 40.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Height'
+      TabOrder = 16
+    end
+    object WidthEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 39
+      Text = '256'
+      Position.X = 56.000000000000000000
+      Position.Y = 317.000000000000000000
+      Enabled = False
+      Size.Width = 49.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object MemoHints: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Lines.Strings = (
+        'tel:+11234567890'
+        ''
+        'Joining a Wi'#8209'Fi network'
+        
+          'Common format: WIFI:S:<SSID>;T:<WEP|WPA|blank>;P:<PASSWORD>;H:<t' +
+          'rue|false|blank>;;'
+        'Sample: WIFI:S:MySSID;T:WPA;P:MyPassW0rd;;'
+        ''
+        'https://en.wikipedia.org/wiki/VCard'
+        ''
+        'BEGIN:VCARD'
+        'VERSION:3.0'
+        'N:Lastname;Firstname'
+        'FN:Firstname Lastname'
+        'ORG:CompanyName'
+        'TITLE:JobTitle'
+        'ADR:;;123 Sesame St;SomeCity;CA;12345;USA'
+        'TEL;WORK;VOICE:1234567890'
+        'TEL;CELL:Mobile'
+        'TEL;FAX:'
+        'EMAIL;WORK;INTERNET:foo@email.com'
+        'URL:http://website.com'
+        'END:VCARD'
+        ''
+        'BEGIN:VCARD'
+        'VERSION:2.1'
+        'N:Scott C. Dunn'
+        'ORG:Me'
+        'TITLE:Writer'
+        'TEL;MOBILE;VOICE:123-456-7890'
+        'ADR:123 No Name Street'
+        'Salt Lake City, Utah 84119'
+        'EMAIL:scott@scottcdunn.com'
+        'URL:https://steemit.com/@digitalfirehose'
+        'URL:https://medium.com/@scottcdunn'
+        'URL:https://thedigitalfirehose.blogspot.com/'
+        'END:VCARD'
+        ''
+        'https://en.wikipedia.org/wiki/MeCard_(QR_code)'
+        ''
+        'MECARD:N:Doe,John;TEL:13035551212;EMAIL:john.doe@example.com;;'
+        '')
+      Position.X = 527.000000000000000000
+      Position.Y = 48.000000000000000000
+      Size.Width = 253.000000000000000000
+      Size.Height = 201.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 40
+      Viewport.Width = 233.000000000000000000
+      Viewport.Height = 181.000000000000000000
+    end
+    object MemoData: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Lines.Strings = (
+        'BEGIN:VCARD'
+        'VERSION:3.0'
+        'N:Lastname;Firstname'
+        'FN:Firstname Lastname'
+        'ORG:CompanyName'
+        'TITLE:JobTitle'
+        'ADR:;;123 Sesame St;SomeCity;CA;12345;USA'
+        'TEL;WORK;VOICE:1234567890'
+        'TEL;CELL:Mobile'
+        'TEL;FAX:'
+        'EMAIL;WORK;INTERNET:foo@email.com'
+        'URL:http://website.com'
+        'END:VCARD')
+      Position.X = 8.000000000000000000
+      Position.Y = 48.000000000000000000
+      Size.Width = 511.000000000000000000
+      Size.Height = 201.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 41
+      Viewport.Width = 491.000000000000000000
+      Viewport.Height = 197.000000000000000000
+    end
+    object Label1: TLabel
+      StyledSettings = [Family, FontColor]
+      Position.X = 8.000000000000000000
+      Position.Y = 23.000000000000000000
+      Size.Width = 177.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 14.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      Text = 'Enter QRcode text below:'
+      TabOrder = 42
+    end
+    object Label7: TLabel
+      Position.X = 527.000000000000000000
+      Position.Y = 23.000000000000000000
+      Size.Width = 253.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Hints / Codes I'#39've found'
+      TabOrder = 43
+    end
+    object SVGcheckbox: TCheckBox
+      StyledSettings = [Family, Size, FontColor]
+      Position.X = 239.000000000000000000
+      Position.Y = 327.000000000000000000
+      Size.Width = 151.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 44
+      Text = 'Generate SVG File'
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      OnChange = SVGcheckboxChange
+    end
+    object Label8: TLabel
+      Position.X = 577.000000000000000000
+      Position.Y = 270.000000000000000000
+      Size.Width = 49.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Label8'
+      TabOrder = 46
+    end
+    object Label9: TLabel
+      Position.X = 527.000000000000000000
+      Position.Y = 254.000000000000000000
+      Size.Width = 26.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'X'
+      TabOrder = 47
+    end
+    object Label11: TLabel
+      Position.X = 296.000000000000000000
+      Position.Y = 257.000000000000000000
+      Size.Width = 73.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Black Color:'
+      TabOrder = 50
+    end
+    object ColorComboBox1: TColorComboBox
+      DropDownKind = Custom
+      Color = claBlack
+      DisableFocusEffect = False
+      ItemIndex = 7
+      Position.X = 368.000000000000000000
+      Position.Y = 257.000000000000000000
+      Size.Width = 151.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 51
+    end
+    object Label12: TLabel
+      Position.X = 296.000000000000000000
+      Position.Y = 282.000000000000000000
+      Size.Width = 73.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'White Color:'
+      TabOrder = 48
+    end
+    object ColorComboBox2: TColorComboBox
+      DropDownKind = Custom
+      Color = claWhite
+      DisableFocusEffect = False
+      ItemIndex = 143
+      Position.X = 368.000000000000000000
+      Position.Y = 282.000000000000000000
+      Size.Width = 151.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 49
+    end
+    object SkLabel1: TSkLabel
+      Position.X = 216.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 227.000000000000000000
+      Size.Height = 28.000000000000000000
+      Size.PlatformDefault = False
+      StyledSettings = [Family, Size, Style]
+      TextSettings.Decorations.Color = claTurquoise
+      TextSettings.Decorations.StrokeColor = claYellow
+      TextSettings.FontColor = claRed
+      Words = <
+        item
+          Font.Families = 'Comic Sans MS'
+          Font.Size = 20.000000000000000000
+          StyledSettings = [Style, FontColor]
+          Text = 'Skia4Delphi Sample App'
+        end>
+    end
+    object BMPcheckbox: TCheckBox
+      StyledSettings = [Family, Size, FontColor]
+      Position.X = 239.000000000000000000
+      Position.Y = 312.000000000000000000
+      Size.Width = 147.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 24
+      Text = 'Generate BMP File'
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      OnChange = BMPcheckboxChange
+    end
+    object Label10: TLabel
+      Position.X = 577.000000000000000000
+      Position.Y = 254.000000000000000000
+      Size.Width = 26.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Y'
+      TabOrder = 34
+    end
+    object StopButton: TButton
+      Enabled = False
+      Position.X = 672.000000000000000000
+      Position.Y = 339.000000000000000000
+      TabOrder = 53
+      Text = 'STOP'
+      OnClick = StopButtonClick
+    end
+    object DONATE: TButton
+      Position.X = 527.000000000000000000
+      Position.Y = 312.000000000000000000
+      Size.Width = 122.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 54
+      Text = 'DONATE'
+      OnClick = DONATEClick
+    end
+    object Label14: TLabel
+      StyledSettings = [Family, Size, Style]
+      Position.X = 527.000000000000000000
+      Position.Y = 295.000000000000000000
+      Size.Width = 177.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claDarkblue
+      Text = 'Donate button opens webpage'
+      TabOrder = 55
+    end
+    object Button1: TButton
+      Position.X = 528.000000000000000000
+      Position.Y = 344.000000000000000000
+      Size.Width = 121.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 56
+      Text = 'Open Source Link'
+      OnClick = Button1Click
+    end
+    object maxspeedCheckbox: TCheckBox
+      StyledSettings = [Family, Size, FontColor]
+      Position.X = 239.000000000000000000
+      Position.Y = 346.000000000000000000
+      Size.Width = 151.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 45
+      Text = 'Max Speed'
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      OnChange = SVGcheckboxChange
+    end
+  end
+  object mLog: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = MostBottom
+    Margins.Left = 10.000000000000000000
+    Margins.Right = 10.000000000000000000
+    Position.X = 10.000000000000000000
+    Position.Y = 672.000000000000000000
+    Size.Width = 742.000000000000000000
+    Size.Height = 71.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Viewport.Width = 738.000000000000000000
+    Viewport.Height = 67.000000000000000000
+  end
+  object SD: TSaveDialog
+    DefaultExt = '*.bmp'
+    Filter = 'Bitmap (*.bmp)|*.bmp'
+    Left = 400
+    Top = 96
+  end
+  object ScrollBox1: TScrollBox
+    Align = Client
+    Size.Width = 762.000000000000000000
+    Size.Height = 303.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    Viewport.Width = 762.000000000000000000
+    Viewport.Height = 303.000000000000000000
+    object imgQRCode: TImage
+      MultiResBitmap = <
+        item
+        end>
+      DisableInterpolation = True
+      Hint = 'BMP'
+      Position.Y = 43.000000000000000000
+      Size.Width = 256.000000000000000000
+      Size.Height = 256.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object SkSvg1: TSkSvg
+      Hint = 'SVG'
+      Position.X = 264.000000000000000000
+      Position.Y = 43.000000000000000000
+      Size.Width = 256.000000000000000000
+      Size.Height = 256.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Label13: TLabel
+      StyledSettings = [Family, FontColor]
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 105.000000000000000000
+      Size.Height = 27.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      Text = 'BMP:'
+      TabOrder = 2
+    end
+    object Label15: TLabel
+      StyledSettings = [Family, FontColor]
+      Position.X = 272.000000000000000000
+      Position.Y = 16.000000000000000000
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      Text = 'SVG:'
+      TabOrder = 3
+    end
+  end
+  object gtQRCodeGenFMX1: TgtQRCodeGenFMX
+    MultiSelectFileFormat = [qrSVG, qrBMP]
+    UseInnerStyleSVG = True
+    Encoding = qrAuto
+    ErrorCorrectionLevel = 3
+    QuietZone = 4
+    ImageControl = imgQRCode
+    ThreadSleep = 0
+    OnGenerateBefore = gtQRCodeGenFMX1GenerateBefore
+    OnGenerateDuring = gtQRCodeGenFMX1GenerateDuring
+    OnGenerateAfter = gtQRCodeGenFMX1GenerateAfter
+    OnError = gtQRCodeGenFMX1Error
+    OnGenerateFinally = gtQRCodeGenFMX1GenerateFinally
+    OnFillColor = gtQRCodeGenFMX1FillColor
+    Left = 328
+    Top = 176
+  end
+  object gtCommandPrompt1: TgtCommandPrompt
+    OnReadCommandPrompt = gtCommandPrompt1ReadCommandPrompt
+    Left = 440
+    Top = 176
+  end
+end
