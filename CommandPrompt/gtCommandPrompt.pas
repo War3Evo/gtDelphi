@@ -34,7 +34,7 @@ type
 
   TOnError = procedure(OutPut: String) of object;
 
-  TCommandPrompt = class(TComponent)
+  TgtCommandPrompt = class(TComponent)
   private
     { Private declarations }
     FThreadDone: Boolean;
@@ -83,10 +83,10 @@ implementation
 
 procedure Register;
 begin
-  RegisterComponents('gtDelphi', [TCommandPrompt]);
+  RegisterComponents('gtDelphi', [TgtCommandPrompt]);
 end;
 
-constructor TCommandPrompt.Create(AOwner: TComponent);
+constructor TgtCommandPrompt.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);  //ALWAYS do this first!
 
@@ -166,7 +166,7 @@ begin
   ErrorString := '';
 end;
 
-procedure TCommandPrompt.OnThreadUpdate(OutPut, Error: AnsiString);
+procedure TgtCommandPrompt.OnThreadUpdate(OutPut, Error: AnsiString);
 // synchronize procedure for monitor thread
 begin
   if assigned(FOnReadCommandPrompt) = true then
@@ -175,7 +175,7 @@ begin
       if Error <> '' then FOnError(String(Error));
 end;
 
-Destructor TCommandPrompt.Destroy;
+Destructor TgtCommandPrompt.Destroy;
 begin
     WritePipeOut(InputPipeWrite, 'EXIT'); // quit the CMD we started
 
@@ -195,20 +195,20 @@ begin
 end;
 
 
-procedure TCommandPrompt.cmdWriteln(text: String);
+procedure TgtCommandPrompt.cmdWriteln(text: String);
 begin
   WritePipeOut(InputPipeWrite, AnsiString(text));
   if assigned(FOnWriteCommandPrompt) = true then
     FOnWriteCommandPrompt(text);
 end;
 
-procedure TCommandPrompt.Stop();
+procedure TgtCommandPrompt.Stop();
 begin
   if FComponentThread.Terminated = false then FComponentThread.Terminate;
   FThreadDone := true;
 end;
 
-procedure TCommandPrompt.Start();
+procedure TgtCommandPrompt.Start();
  { upon form creation, this calls the command-interpreter, sets up the three
    pipes to catch input and output, and starts a thread to monitor and show
    the output of the command-interpreter }
