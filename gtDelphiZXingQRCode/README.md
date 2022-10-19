@@ -3,6 +3,12 @@ gtDelphiZXingQRCode
 
 ### Threaded version of DelphiZXingQRCode ###
 
+10/19/2022
+
+The Skia4Delphi version compiled application you can download from as gtQRCodeFMX_Skia Freeware
+
+https://www.timmons.pro/opensource.php
+
 10/09/2022
 
 *** COLORing Pixels Work! ***
